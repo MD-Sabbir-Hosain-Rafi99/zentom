@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Watch Shop</title>
+
+    <!-- Tailwind + DaisyUI CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.14/dist/full.min.css" rel="stylesheet" />
+    <link rel="shortcut icon" href="images/logo1.jpeg" type="image/x-icon">
+
+</head>
+
+<body class="bg-base-200">
+
+    <!-- NAVBAR -->
+    <div class="navbar bg-base-100 shadow sticky top-0 z-50 px-4">
+
+        <div class="navbar-start">
+            <a href="./index.html" class="flex items-center">
+                <img src="images/logo.png" alt="Logo" class="h-10 md:h-12 w-auto object-contain" />
+            </a>
+        </div>
+
+        <div class="navbar-center hidden md:flex">
+            <ul class="menu menu-horizontal px-1">
+                <li><a href="#products">Products</a></li>
+                <li><a href="#footer">Contact</a></li>
+            </ul>
+        </div>
+
+        <div class="navbar-end gap-2">
+            <button id="openCartBtn" class="btn btn-outline">
+                Cart
+                <span id="cartCountBadge" class="badge badge-primary ml-2">0</span>
+            </button>
+        </div>
+
+    </div>
+
+    <!-- BANNER / FULL IMAGE SLIDER (RESPONSIVE) -->
+    <section class="w-full">
+        <div class="relative w-full h-[60vh] sm:h-[75vh] md:h-[90vh] overflow-hidden">
+
+            <!-- 🔥 Blurred Background (fills full area) -->
+            <img id="heroBg" class="absolute inset-0 w-full h-full object-cover blur-2xl scale-110" alt="Background" />
+
+            <!-- 🔥 Main Banner Image (NO CROP) -->
+            <img id="heroImg" class="absolute inset-0 w-full h-full object-contain" alt="Banner" />
+
+            <!-- Overlay -->
+            <div class="absolute inset-0 bg-black/30"></div>
+
+            <!-- Content -->
+            <div class="absolute inset-0 flex items-center justify-center px-4">
+                <div class="text-white text-center max-w-2xl">
+
+                    <h1 class="font-extrabold leading-tight text-[clamp(22px,5vw,52px)]">
+                        Premium Watches, Timeless Style
+                    </h1>
+
+                    <p class="mt-4 text-white/90 text-[clamp(14px,2.8vw,18px)]">
+                        Elegant design, modern craftsmanship. Browse our latest collection and order instantly.
+                    </p>
+
+                    <div class="mt-6 flex gap-4 justify-center">
+                        <button id="bannerBuyNowBtn" class="btn btn-primary">
+                            Buy Now
+                        </button>
+
+                        <a href="#products"
+                            class="btn btn-outline text-white border-white hover:bg-white hover:text-black">
+                            Shop Now
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Modern Indicators -->
+            <div class="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-3">
+                <button class="w-3 h-3 rounded-full bg-white/40 transition" data-hero="0"></button>
+                <button class="w-3 h-3 rounded-full bg-white/40 transition" data-hero="1"></button>
+                <button class="w-3 h-3 rounded-full bg-white/40 transition" data-hero="2"></button>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- PRODUCTS -->
+    <section id="products" class="max-w-6xl mx-auto px-4 mt-10 mb-16">
+        <div class="flex items-end justify-between gap-3">
+            <div>
+                <h2 class="text-2xl font-bold">Our Watches</h2>
+                <p class="text-base-content/70">Click a product to view details & colors.</p>
+            </div>
+
+            <div class="join">
+                <input id="searchInput" class="input input-bordered join-item w-44 md:w-64"
+                    placeholder="Search watches..." />
+                <button id="clearSearchBtn" class="btn join-item">Clear</button>
+            </div>
+        </div>
+
+        <div id="productGrid" class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-6"></div>
+
+        <div class="flex justify-center mt-8">
+            <button id="viewMoreBtn" class="btn btn-outline">View more</button>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer id="footer" class="footer footer-center p-10 bg-base-300 text-base-content">
+        <aside>
+            <p class="font-bold text-lg">ZENTOM</p>
+            <p>Dhaka, Bangladesh</p>
+            <p class="text-base-content/70">© <span id="year"></span> All rights reserved</p>
+        </aside>
+    </footer>
+
+    <!-- CART MODAL -->
+    <dialog id="cartModal" class="modal">
+        <div class="modal-box max-w-2xl">
+            <div class="flex items-center justify-between">
+                <h3 class="font-bold text-lg">Your Cart</h3>
+                <form method="dialog">
+                    <button class="btn btn-sm">✕</button>
+                </form>
+            </div>
+
+            <div id="cartItemsWrap" class="mt-4 space-y-3"></div>
+
+            <div class="mt-5 flex items-center justify-between">
+                <div class="text-lg font-semibold">
+                    Total: <span id="cartTotal">৳0</span>
+                </div>
+                <div class="flex gap-2">
+                    <button id="clearCartBtn" class="btn btn-ghost">Clear</button>
+                    <button id="openCheckoutBtn" class="btn btn-primary">Buy Now</button>
+                </div>
+            </div>
+        </div>
+        <form method="dialog" class="modal-backdrop">
+            <button>close</button>
+        </form>
+    </dialog>
+
+    <!-- CHECKOUT MODAL -->
+    <dialog id="checkoutModal" class="modal">
+        <div class="modal-box w-11/12 max-w-5xl h-[92vh] p-0 overflow-hidden bg-base-100">
+
+            <div class="flex h-full flex-col">
+
+                <!-- Header -->
+                <div class="shrink-0 border-b bg-base-100 px-4 sm:px-6 py-4 flex items-center justify-between">
+                    <h3 class="text-xl font-bold">Checkout</h3>
+                    <form method="dialog">
+                        <button class="btn btn-sm btn-ghost btn-circle">✕</button>
+                    </form>
+                </div>
+
+                <!-- Scrollable Content -->
+                <div class="flex-1 overflow-y-auto">
+                    <div class="grid grid-cols-1 md:grid-cols-2">
+
+                        <!-- LEFT: FORM -->
+                        <div class="order-1 p-4 sm:p-6 bg-base-100">
+                            <h4 class="font-semibold text-lg mb-4">Contact</h4>
+
+                            <div class="space-y-4">
+                                <input id="custName" class="input input-bordered w-full" placeholder="Full Name *" />
+
+                                <input id="custPhone" class="input input-bordered w-full"
+                                    placeholder="Phone Number *" />
+
+                                <textarea id="custAddress" class="textarea textarea-bordered w-full" rows="4"
+                                    placeholder="Address *"></textarea>
+                            </div>
+
+                            <h4 class="font-semibold text-lg mt-8 mb-4">Shipping Method</h4>
+
+                            <div class="space-y-3">
+                                <label
+                                    class="flex items-center justify-between rounded-2xl border px-4 py-4 cursor-pointer">
+                                    <div class="flex items-center gap-3">
+                                        <input type="radio" name="shipping" value="80" class="radio radio-sm" checked />
+                                        <div>
+                                            <div class="font-medium">Inside Dhaka</div>
+                                            <div class="text-xs text-base-content/60">Dhaka</div>
+                                        </div>
+                                    </div>
+                                    <span class="font-medium">৳80</span>
+                                </label>
+
+                                <label
+                                    class="flex items-center justify-between rounded-2xl border px-4 py-4 cursor-pointer">
+                                    <div class="flex items-center gap-3">
+                                        <input type="radio" name="shipping" value="150" class="radio radio-sm" />
+                                        <div>
+                                            <div class="font-medium">Outside Dhaka</div>
+                                            <div class="text-xs text-base-content/60">All Bangladesh</div>
+                                        </div>
+                                    </div>
+                                    <span class="font-medium">৳150</span>
+                                </label>
+                            </div>
+
+                            <div class="mt-6 rounded-2xl bg-base-200 p-4 text-sm leading-relaxed text-base-content/80">
+                                <div class="font-semibold mb-1">Delivery & Return Policy</div>
+                                <div>Dhaka City – <b>80৳</b> | Outside Dhaka – <b>150৳</b></div>
+                                <div class="mt-1">
+                                    Product পছন্দ না হলে return করা যাবে, তবে delivery charge প্রযোজ্য হবে।
+                                    প্রোডাক্ট কোয়ালিটি সম্পন্ন আশা করি ভালো লাগবে ❤️
+                                </div>
+                            </div>
+
+                            <p id="orderStatus" class="mt-4 text-sm text-base-content/70"></p>
+                        </div>
+
+                        <!-- RIGHT: ORDER SUMMARY -->
+                        <div
+                            class="order-2 bg-base-200 p-4 sm:p-6 border-t md:border-t-0 md:border-l flex flex-col h-full">
+
+                            <h4 class="font-semibold text-lg mb-4">Order Summary</h4>
+
+                            <!-- products -->
+                            <div id="checkoutItemsWrap" class="space-y-3 flex-1 overflow-y-auto"></div>
+
+                            <!-- price summary -->
+                            <div class="mt-6 border-t pt-4 space-y-3 shrink-0">
+
+                                <div class="flex items-center justify-between text-sm">
+                                    <span class="text-base-content/70">Subtotal</span>
+                                    <span id="subtotalPrice" class="font-medium">৳0</span>
+                                </div>
+
+                                <div class="flex items-center justify-between text-sm">
+                                    <span class="text-base-content/70">Shipping</span>
+                                    <span id="shippingPrice" class="font-medium">৳0</span>
+                                </div>
+
+                                <div class="flex items-center justify-between border-t pt-3 text-lg font-bold">
+                                    <span>Total</span>
+                                    <span id="checkoutTotal">৳0</span>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Footer -->
+                <div class="shrink-0 border-t bg-base-100 px-4 sm:px-6 py-4">
+                    <button id="confirmOrderBtn" class="btn btn-primary w-full h-12 text-base">
+                        Complete Order
+                    </button>
+                </div>
+
+            </div>
+        </div>
+
+        <form method="dialog" class="modal-backdrop">
+            <button>close</button>
+        </form>
+    </dialog>
+
+    <script src="./app.js"></script>
+</body>
+
+</html>
